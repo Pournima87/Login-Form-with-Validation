@@ -25,3 +25,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   });
+
+  function register(){
+    alert("Register Sucessfully")
+  }
+
+  function login(){
+    alert("Login Successful")
+  }
