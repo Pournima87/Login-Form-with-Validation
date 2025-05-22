@@ -1,44 +1,27 @@
-const form = document.getElementById("auth-form");
-const title = document.getElementById("form-title");
-const toggleLink = document.getElementById("toggle-link");
-const confirmGroup = document.getElementById("confirm-group");
-let isRegistering = false;
+document.addEventListener("DOMContentLoaded", () => {
+    const inputs = [
+      { id: "first-name", validate: val => val.trim().length > 0 },
+      { id: "last-name", validate: val => val.trim().length > 0 },
+      { id: "reg-email", validate: val => /^\S+@\S+\.\S+$/.test(val) },
+      { id: "password", validate: val => val.length >= 6 },
+      {
+        id: "confirm-password",
+        validate: () => document.getElementById("confirm-password").value === document.getElementById("password").value
+      }
+    ];
 
-toggleLink.addEventListener("click", (e) => {
-  e.preventDefault();
-  isRegistering = !isRegistering;
-  title.textContent = isRegistering ? "Register" : "Login";
-  toggleLink.textContent = isRegistering ? "Login" : "Register";
-  confirmGroup.style.display = isRegistering ? "block" : "none";
-});
+    inputs.forEach(inputObj => {
+      const input = document.getElementById(inputObj.id);
+      const feedback = document.getElementById(inputObj.id + "-feedback");
 
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
-
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirm-password").value;
-
-  if (!validateEmail(email)) {
-    alert("Invalid email format ❗");
-    return;
-  }
-
-  if (password.length < 6) {
-    alert("Password must be at least 6 characters ❗");
-    return;
-  }
-
-  if (isRegistering && password !== confirmPassword) {
-    alert("Passwords do not match ❗");
-    return;
-  }
-
-  alert(isRegistering ? "Registered Successfully ✔️" : "Logged in Successfully ✔️");
-});
-
-function validateEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email.toLowerCase());
-}
-
+      input.addEventListener("input", () => {
+        if (inputObj.validate(input.value)) {
+          feedback.textContent = "✅";
+          feedback.style.color = "green";
+        } else {
+          feedback.textContent = "❌ Invalid input";
+          feedback.style.color = "red";
+        }
+      });
+    });
+  });
